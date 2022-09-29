@@ -6,31 +6,40 @@
  * @flow strict-local
  */
 
-import React, { useState } from 'react';
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    Button,
-    Image,
-    View,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, Button, View, ScrollView } from 'react-native';
+import Card from './Card';
+import { taskList } from '../constant/taskListData';
+const HomeScreen = ({ navigation }) => {
+    const [allTask, setAllTask] = useState(taskList);
 
+    console.log(allTask,'ffffff');
+    useEffect(() => {
+        setAllTask(taskList)
+    }, [])
+    const handleDeleteTask = (item) => {
+        let filteredData = allTask.filter(kl => kl.id !== item.id)
+        setAllTask(filteredData)
+    }
+    const handleUpdateTask = (item) => {
 
-const HomeScreen = ({navigation}) => {
+    }
     return (
         <SafeAreaView >
-            <Text style={styles.header}>WelCome to React Native Home Screen</Text>
+            <Text style={styles.header}>Home  Page</Text>
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+                {allTask.map(val => (
+                    <Card handleDeleteTask={handleDeleteTask} handleUpdateTask={handleUpdateTask} taskDetail={val} />
+                ))}
+            </ScrollView>
             <View style={styles.submitButtonView}>
                 <Button
-                    style={styles.submitButton}
                     title="+ Add New Task"
                     color="#333"
                     accessibilityLabel="Learn more about this purple button"
                     onPress={() =>
                         navigation.navigate('FormPage')
-                      }
+                    }
                 />
             </View>
         </SafeAreaView>
@@ -38,20 +47,23 @@ const HomeScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    
+    // contentContainer: {
+    //     paddingVertical: 20
+    //   },
     header: {
         fontSize: 20,
+        fontWeight : 'bold',
         textAlign: 'center',
         paddingTop: 10,
     },
-    
+
     submitButtonView: {
         backgroundColor: 'red',
-        pointer : 'cursor',
+        cursor: 'pointer',
+        position: 'fixed',
+        bottom: 38,
+        width: '100%'
     },
-    submitButton: {
-        fontSize : '40px',
-    }
 });
 
 export default HomeScreen;
